@@ -1,0 +1,33 @@
+Results:
+
+For Iris Data Set:
+
+https://archive.ics.uci.edu/ml/datasets/iris
+Since the data set is small, the decision tree provides good accuracy rate (90-100%) both on test and training test without pruning. 
+This means that the tree is not overfitting in the first place and does not need pruning.
+
+However, applying random pruning strategy to the decision tree by pruning any random node, we have a chance of improving on the test and training accuracy,
+as shown in the output file.
+Pre-pruning Training accuracy: 87%
+Post-pruning Training accuracy: 90%
+
+
+
+
+
+
+For  Hayes-Roth Data Set:
+
+https://archive.ics.uci.edu/ml/datasets/Hayes-Roth
+
+Pruning strategy: Random 
+Random number of nodes at different depths pruned such that there is an increase of 7% in the accuracy. 
+
+Pre-pruning Training accuracy: 73%
+Post-pruning Training accuracy: 80%
+
+
+
+
+**No assumptions were made during the process**
+***Values may differ upon continuous pruning of the tree***

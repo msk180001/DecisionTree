@@ -113,7 +113,8 @@ def entropy(rows):
     counts = class_counts(rows)
     for lbl in counts:
         prob_of_lbl = counts[lbl] / float(len(rows))
-        entropy += -prob_of_lbl * math.log2(prob_of_lbl)   
+        entropy -= prob_of_lbl * math.log(prob_of_lbl, 2) 
+       
     return entropy
 
 
@@ -123,7 +124,7 @@ def info_gain(left, right, current_uncertainty):
     The uncertainty of the starting node, minus the weighted impurity of
     two child nodes.
     """
-    p = float(len(left)) / (len(left) + len(right))
+    p = float(len(left)) / float(len(left) + len(right))
 
     ## TODO: Step 3, Use Entropy in place of Gini
     return current_uncertainty - p * entropy(left) - (1 - p) * entropy(right)
@@ -155,7 +156,7 @@ def find_best_split(rows, header):
 
             # Calculate the information gain from this split
             gain = info_gain(true_rows, false_rows, current_uncertainty)
-
+          
             # You actually can use '>' instead of '>=' here
             # but I wanted the tree to look a certain way for our
             # toy dataset.
@@ -275,7 +276,14 @@ def classify(row, node):
 
     # Base case: we've reached a leaf
     if isinstance(node, Leaf):
-        return node.predictions
+        predicted_class = ""
+        maximum = 0
+        for label in node.predictions:
+            if(maximum<node.predictions[label]):
+                maximum = node.predictions[label]
+                predicted_class = label
+                
+        return predicted_class
 
     # Decide whether to follow the true-branch or the false-branch.
     # Compare the feature / value stored in the node,
@@ -286,13 +294,12 @@ def classify(row, node):
         return classify(row, node.false_branch)
 
 ## TODO: Step 4
-def print_tree(node, spacing="", count):
+def print_tree(node, spacing=""):
     """World's most elegant tree printing function."""
     
     # Base case: we've reached a leaf
     if isinstance(node, Leaf):
         print (spacing + "Predict", node.predictions)
-        count += 1
         return
 
     # Print the question at this node
@@ -305,7 +312,8 @@ def print_tree(node, spacing="", count):
     # Call this function recursively on the false branch
     print (spacing + '--> False:')
     print_tree(node.false_branch, spacing + "  ")
-    count +=1
+    
+      
     
 
 
@@ -356,7 +364,9 @@ def computeAccuracy(rows, node):
     for row in rows:
         if row[-1] == classify(row, node):
             correct += 1
+            
 	
-    return correct/predicted
+    return round(correct/predicted, 2)*100
+
 
 
